@@ -133,6 +133,13 @@ body {
     font-size: 1rem;
     transition: all 0.2s ease;
     background-color: white;
+    width: 100%;
+    min-width: 200px;
+}
+
+.model-selection {
+    width: 100%;
+    max-width: 100%;
 }
 
 .form-select:focus {
