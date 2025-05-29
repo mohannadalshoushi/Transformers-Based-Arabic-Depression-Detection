@@ -145,7 +145,7 @@ body {
 }
 
 .form-select {
-    padding: 0.75rem 1rem;
+    /* padding: 0.75rem 1rem; */
     border: 2px solid hsl(var(--border-color));
     border-radius: var(--border-radius);
     font-size: 1rem;
@@ -166,7 +166,7 @@ body {
 }
 
 /* Input Area */
-.input-area {
+/* .input-area {
     background: white;
     border-top: 1px solid hsl(var(--border-color)) !important;
     box-shadow: var(--shadow-sm);
@@ -200,7 +200,9 @@ body {
 .text-input:disabled {
     background-color: hsl(var(--secondary-color));
     opacity: 0.6;
-}
+} */
+
+
 
 /* Send Button */
 .send-btn {
