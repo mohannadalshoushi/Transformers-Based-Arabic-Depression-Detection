@@ -1,3 +1,9 @@
+*{
+    margin: 0; 
+}
+
+
+
 /* Custom CSS Variables */
 :root {
     --primary-color: 210 100% 56%; /* #0D7EFF */
@@ -39,12 +45,24 @@ body {
 }
 
 /* Header Styles */
-.app-header {
+/* .app-header {
     background: linear-gradient(135deg, hsl(var(--primary-color)) 0%, hsl(var(--info-color)) 100%);
     color: white;
     border-bottom: 1px solid hsl(var(--border-color)) !important;
     box-shadow: var(--shadow-sm);
+} */
+
+.app-header {
+    width: 100vw;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    border-bottom: 4px solid #1e8449 !important;
+    box-shadow: var(--shadow-sm);
+    margin-left: calc(-50vw + 50%);
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
+
 
 .main-title {
     font-size: 2rem;
