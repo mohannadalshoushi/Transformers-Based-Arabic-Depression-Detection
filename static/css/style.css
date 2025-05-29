@@ -70,10 +70,13 @@ body {
 /* Messages Area */
 .messages-area {
     overflow-y: auto;
-    background-color: hsl(var(--secondary-color));
-    background-image: 
-        radial-gradient(circle at 20% 80%, hsla(var(--primary-color), 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, hsla(var(--info-color), 0.03) 0%, transparent 50%);
+    background-color: hsl(var(--light-color));
+    padding: 2rem;
+}
+
+.welcome-message {
+    border-bottom: 1px solid hsl(var(--border-color));
+    margin-bottom: 2rem;
 }
 
 /* Message Bubbles */

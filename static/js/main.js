@@ -205,7 +205,7 @@ class DepressionDetectionApp {
     }
     
     removeLoadingMessage() {
-        const loadingMessage = this.messagesArea.querySelector('.loading');
+        const loadingMessage = this.messagesArea.querySelector('.loading-message');
         if (loadingMessage) {
             loadingMessage.remove();
         }
