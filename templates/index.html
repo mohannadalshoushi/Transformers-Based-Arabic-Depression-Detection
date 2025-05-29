@@ -37,24 +37,9 @@
                     <div class="messages-area flex-grow-1 p-4" id="messagesArea">
                         
                         <!-- Welcome Message -->
-                        <div class="message-bubble bot-message">
-                            <div class="message-content">
-                                <div class="mb-3">
-                                    <i class="fas fa-robot me-2 text-primary"></i>
-                                    <strong>مرحباً بك في نظام كشف الاكتئاب</strong>
-                                </div>
-                                <p class="mb-3">يمكنك استخدام هذا النظام لتحليل النصوص العربية وكشف علامات الاكتئاب باستخدام أحد النماذج الأربعة المتاحة:</p>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="fas fa-circle-dot text-info me-2"></i><strong>SVM:</strong> نموذج دعم الآلة المتجه (نموذج واحد)</li>
-                                    <li class="mb-2"><i class="fas fa-circle-dot text-success me-2"></i><strong>Stacking:</strong> نموذج التكديس (نموذج مجمع)</li>
-                                    <li class="mb-2"><i class="fas fa-circle-dot text-warning me-2"></i><strong>LSTM:</strong> الشبكة العصبية (التعلم العميق)</li>
-                                    <li class="mb-2"><i class="fas fa-circle-dot text-danger me-2"></i><strong>ArabicBERT:</strong> نموذج المحولات</li>
-                                </ul>
-                                <p class="text-muted small mt-3">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    اختر النموذج أولاً، ثم اكتب النص الذي تريد تحليله
-                                </p>
-                            </div>
+                        <div class="welcome-message text-center py-4">
+                            <h4 class="mb-3">مرحباً بك في نظام كشف الاكتئاب</h4>
+                            <p class="text-muted">اختر النموذج واكتب النص لتحليل علامات الاكتئاب</p>
                         </div>
                     </div>
 
@@ -62,39 +47,39 @@
                     <div class="input-area p-4 border-top">
                         
                         <!-- Model Selection -->
-                        <div class="model-selection mb-3" id="modelSelection">
-                            <label for="modelSelect" class="form-label fw-bold">
-                                <i class="fas fa-cog me-2"></i>اختر النموذج
-                            </label>
+                        <div class="model-selection mb-3">
+                            <label for="modelSelect" class="form-label fw-bold">اختر النموذج:</label>
                             <select class="form-select" id="modelSelect">
-                                <option value="">-- اختر النموذج للتحليل --</option>
-                                <option value="svm">SVM - نموذج دعم الآلة المتجه</option>
-                                <option value="stacking">Stacking - النموذج المجمع</option>
-                                <option value="lstm">LSTM - الشبكة العصبية</option>
-                                <option value="arabicbert">ArabicBERT - نموذج المحولات</option>
+                                <option value="">-- اختر النموذج --</option>
+                                <option value="svm">SVM</option>
+                                <option value="stacking">Stacking</option>
+                                <option value="lstm">LSTM</option>
+                                <option value="arabicbert">ArabicBERT</option>
                             </select>
                         </div>
 
                         <!-- Text Input -->
-                        <div class="input-group" id="textInputGroup" style="display: none;">
+                        <div class="text-input-section mb-3" id="textInputSection" style="display: none;">
+                            <label for="textInput" class="form-label fw-bold">اكتب النص:</label>
                             <textarea 
-                                class="form-control text-input" 
+                                class="form-control" 
                                 id="textInput" 
-                                placeholder="اكتب النص العربي هنا لتحليله..."
+                                placeholder="اكتب النص العربي هنا..."
                                 rows="3"
                                 maxlength="1000"
                                 disabled
                             ></textarea>
-                            <button class="btn btn-primary send-btn" type="button" id="sendBtn" disabled>
-                                <i class="fas fa-paper-plane"></i>
-                                <span class="btn-text">تحليل</span>
-                                <span class="spinner-border spinner-border-sm d-none" role="status"></span>
-                            </button>
+                            <div class="text-end mt-2">
+                                <small class="text-muted"><span id="charCount">0</span> / 1000 حرف</small>
+                            </div>
                         </div>
 
-                        <!-- Character Count -->
-                        <div class="character-count text-muted small mt-2" id="characterCount" style="display: none;">
-                            <span id="charCount">0</span> / 1000 حرف
+                        <!-- Send Button -->
+                        <div class="send-section text-center" id="sendSection" style="display: none;">
+                            <button class="btn btn-primary px-4" type="button" id="sendBtn" disabled>
+                                <span class="btn-text">تحليل النص</span>
+                                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -10,11 +10,11 @@ class DepressionDetectionApp {
         
         // DOM elements
         this.modelSelect = document.getElementById('modelSelect');
-        this.textInputGroup = document.getElementById('textInputGroup');
+        this.textInputSection = document.getElementById('textInputSection');
         this.textInput = document.getElementById('textInput');
         this.sendBtn = document.getElementById('sendBtn');
+        this.sendSection = document.getElementById('sendSection');
         this.messagesArea = document.getElementById('messagesArea');
-        this.characterCount = document.getElementById('characterCount');
         this.charCount = document.getElementById('charCount');
         
         this.initializeEventListeners();
@@ -42,33 +42,26 @@ class DepressionDetectionApp {
         this.sendBtn.addEventListener('click', () => {
             this.handleSubmit();
         });
-        
-        // Auto-resize textarea
-        this.textInput.addEventListener('input', () => {
-            this.autoResizeTextarea();
-        });
     }
     
     handleModelSelection(selectedModel) {
         this.selectedModel = selectedModel;
         
         if (selectedModel) {
-            // Show text input area
-            this.textInputGroup.style.display = 'flex';
-            this.characterCount.style.display = 'block';
+            // Show text input and send button
+            this.textInputSection.style.display = 'block';
+            this.sendSection.style.display = 'block';
             this.textInput.disabled = false;
             this.textInput.focus();
-            
-            // Add model selection message
-            this.addBotMessage(`تم اختيار نموذج: <strong>${this.getModelDisplayName(selectedModel)}</strong><br>يمكنك الآن كتابة النص للتحليل.`);
         } else {
-            // Hide text input area
-            this.textInputGroup.style.display = 'none';
-            this.characterCount.style.display = 'none';
+            // Hide text input and send button
+            this.textInputSection.style.display = 'none';
+            this.sendSection.style.display = 'none';
             this.textInput.disabled = true;
             this.textInput.value = '';
-            this.updateSendButton();
+            this.charCount.textContent = '0';
         }
+        this.updateSendButton();
     }
     
     handleTextInput(text) {
@@ -122,7 +115,6 @@ class DepressionDetectionApp {
         // Clear input
         this.textInput.value = '';
         this.handleTextInput('');
-        this.autoResizeTextarea();
         
         // Show loading state
         this.setLoadingState(true);
@@ -162,7 +154,16 @@ class DepressionDetectionApp {
         this.updateSendButton();
         
         if (loading) {
-            this.addBotMessage('جاري تحليل النص...', 'loading');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading-message mb-3';
+            loadingDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    جاري تحليل النص...
+                </div>
+            `;
+            this.messagesArea.appendChild(loadingDiv);
+            this.scrollToBottom();
         } else {
             this.removeLoadingMessage();
         }
@@ -170,15 +171,13 @@ class DepressionDetectionApp {
     
     addUserMessage(text) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = 'message-bubble user-message';
+        messageDiv.className = 'user-message mb-3';
         messageDiv.innerHTML = `
-            <div class="message-content">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-user me-2"></i>
-                    <strong>أنت</strong>
-                    <span class="model-badge ${this.selectedModel} ms-auto">${this.selectedModel.toUpperCase()}</span>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title text-primary">النص المدخل (${this.selectedModel.toUpperCase()}):</h6>
+                    <p class="card-text">${this.escapeHtml(text)}</p>
                 </div>
-                <div>${this.escapeHtml(text)}</div>
             </div>
         `;
         
@@ -216,33 +215,25 @@ class DepressionDetectionApp {
         const isDepression = result.depression_detected;
         const confidence = result.confidence ? Math.round(result.confidence * 100) : null;
         
-        const resultClass = isDepression ? 'depression-detected' : 'no-depression';
-        const resultIcon = isDepression ? 'fas fa-exclamation-triangle text-danger' : 'fas fa-check-circle text-success';
-        const resultColor = isDepression ? 'danger' : 'success';
+        const alertClass = isDepression ? 'alert-danger' : 'alert-success';
+        const resultIcon = isDepression ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle';
         
-        let confidenceText = '';
-        if (confidence) {
-            confidenceText = `<div class="mt-2 small text-muted">
-                <i class="fas fa-chart-line me-1"></i>
-                مستوى الثقة: ${confidence}%
-            </div>`;
-        }
-        
-        const content = `
-            <div class="result-bubble ${resultClass}">
-                <div class="result-title">
-                    <i class="${resultIcon}"></i>
-                    <span>${result.result_text}</span>
-                    <span class="model-badge ${result.model_name} ms-auto">${result.model_name.toUpperCase()}</span>
-                </div>
-                <div class="small text-muted">
-                    النموذج المستخدم: ${this.getModelDisplayName(result.model_name)}
-                </div>
-                ${confidenceText}
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'bot-message mb-3';
+        messageDiv.innerHTML = `
+            <div class="alert ${alertClass}">
+                <h6 class="alert-heading">
+                    <i class="${resultIcon} me-2"></i>
+                    نتيجة التحليل
+                </h6>
+                <p class="mb-1"><strong>${result.result_text}</strong></p>
+                <hr>
+                <p class="mb-0 small">النموذج: ${result.model_name.toUpperCase()}</p>
             </div>
         `;
         
-        this.addBotMessage(content);
+        this.messagesArea.appendChild(messageDiv);
+        this.scrollToBottom();
     }
     
     showError(message) {
