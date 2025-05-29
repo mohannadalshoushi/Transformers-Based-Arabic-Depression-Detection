@@ -132,38 +132,68 @@ class DepressionDetector:
     
     def _simulate_prediction(self, text, model_name):
         """
-        Simple depression detection based on keyword analysis
+        Enhanced depression detection based on comprehensive Arabic keyword analysis
         """
-        # Depression-related keywords in Arabic
+        # Core depression keywords
         depression_keywords = [
-            'اكتئاب', 'حزين', 'يأس', 'قلق', 'وحدة', 'تعب', 'أرق',
-            'مرض', 'ألم', 'صعب', 'مشكلة', 'خوف', 'ضيق', 'زعل',
-            'عزلة', 'كآبة', 'ملل', 'فراغ', 'إحباط', 'يائس', 'منزعج',
-            'حزن', 'كره', 'نوم', 'مكتئب', 'تعيس', 'بائس'
+            'اكتئاب', 'حزين', 'حزن', 'يأس', 'يائس', 'قلق', 'وحدة', 'وحيد', 'منعزل',
+            'تعب', 'تعبان', 'إرهاق', 'أرق', 'مرض', 'ألم', 'صعب', 'صعوبة',
+            'مشكلة', 'مشاكل', 'خوف', 'خائف', 'ضيق', 'زعل', 'زعلان', 'عزلة',
+            'كآبة', 'كئيب', 'ملل', 'مملول', 'فراغ', 'فارغ', 'إحباط', 'محبط',
+            'منزعج', 'كره', 'أكره', 'كاره', 'نوم', 'مكتئب', 'تعيس', 'بائس',
+            'فاشل', 'فشل', 'مستحيل', 'ميؤوس', 'لا أستطيع', 'ما أقدر', 'تايه',
+            'ضايع', 'محتار', 'تعذيب', 'عذاب', 'جحيم', 'معاناة', 'ضياع'
         ]
         
+        # Phrases indicating depression
+        depression_phrases = [
+            'ما فيي', 'مش لاقي', 'مش قادر', 'مش عارف', 'مالي خلق', 'ما بدي',
+            'تعبت من', 'زهقت من', 'ضقت ذرعا', 'ما عاد فيني', 'خلص تعبت',
+            'مش طايق', 'ما بحب حالي', 'بكره حياتي', 'حياتي صعبة', 'مظلمة',
+            'بلا معنى', 'ما إلها قيمة', 'ضايع وقتي', 'محروق', 'مش ناجح',
+            'كل شي غلط', 'ما في أمل', 'مالي مستقبل', 'خنقني', 'يخنقني'
+        ]
+        
+        # Positive indicators
         positive_keywords = [
-            'سعيد', 'فرح', 'جميل', 'رائع', 'ممتاز', 'حب', 'أمل', 'نجح',
-            'إنجاز', 'فوز', 'نشاط', 'طاقة', 'حماس', 'تفاؤل', 'ابتسام',
-            'سرور', 'بهجة', 'راض', 'مبسوط'
+            'سعيد', 'سعادة', 'فرح', 'فرحان', 'مبسوط', 'مسرور', 'جميل', 'رائع', 
+            'ممتاز', 'زين', 'حب', 'بحب', 'أمل', 'أتمنى', 'نجح', 'نجاح', 'إنجاز', 
+            'فوز', 'فايز', 'نشاط', 'نشيط', 'طاقة', 'حماس', 'متحمس', 'تفاؤل', 
+            'متفائل', 'ابتسام', 'ابتسامة', 'ضحك', 'سرور', 'بهجة', 'راض', 
+            'مرتاح', 'هاني', 'محظوظ', 'ممتن', 'شاكر'
         ]
         
-        # Count keywords in the text
-        depression_count = 0
-        positive_count = 0
+        # Normalize text for better matching
+        text_processed = text.lower().replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+        text_processed = text_processed.replace('ة', 'ه').replace('ى', 'ي')
         
-        text_lower = text.lower()
+        # Count depression indicators
+        depression_score = 0
+        positive_score = 0
         
+        # Check for depression keywords
         for keyword in depression_keywords:
-            if keyword in text_lower:
-                depression_count += 1
+            keyword_normalized = keyword.lower().replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+            keyword_normalized = keyword_normalized.replace('ة', 'ه').replace('ى', 'ي')
+            if keyword_normalized in text_processed:
+                depression_score += 1
         
+        # Check for depression phrases (more weight)
+        for phrase in depression_phrases:
+            phrase_normalized = phrase.lower().replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+            phrase_normalized = phrase_normalized.replace('ة', 'ه').replace('ى', 'ي')
+            if phrase_normalized in text_processed:
+                depression_score += 2
+        
+        # Check for positive keywords
         for keyword in positive_keywords:
-            if keyword in text_lower:
-                positive_count += 1
+            keyword_normalized = keyword.lower().replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+            keyword_normalized = keyword_normalized.replace('ة', 'ه').replace('ى', 'ي')
+            if keyword_normalized in text_processed:
+                positive_score += 1
         
-        # Simple prediction logic
-        if depression_count > 0 and depression_count >= positive_count:
+        # Decision logic: depression detected if depression score > positive score
+        if depression_score > positive_score and depression_score > 0:
             return 1  # Depression detected
         else:
             return 0  # No depression detected
