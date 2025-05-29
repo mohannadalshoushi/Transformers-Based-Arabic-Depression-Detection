@@ -44,13 +44,13 @@ class ArabicTextPreprocessor:
     
     def preprocess(self, text):
         """
-        Apply the complete 12-step preprocessing pipeline
+        Apply simplified preprocessing for better results
         """
         if not text or not isinstance(text, str):
             return ""
         
         try:
-            # Step 1: Convert to string and basic cleaning
+            # Step 1: Basic cleaning
             text = str(text).strip()
             
             # Step 2: Remove URLs
@@ -71,25 +71,8 @@ class ArabicTextPreprocessor:
             # Step 7: Remove extra whitespaces
             text = self._remove_extra_whitespace(text)
             
-            # Step 8: Remove punctuation
-            text = self._remove_punctuation(text)
-            
-            # Step 9: Tokenization
-            tokens = self._tokenize(text)
-            
-            # Step 10: Remove stopwords
-            tokens = self._remove_stopwords(tokens)
-            
-            # Step 11: Remove short words (less than 2 characters)
-            tokens = self._remove_short_words(tokens)
-            
-            # Step 12: Stemming
-            tokens = self._apply_stemming(tokens)
-            
-            # Join tokens back to text
-            processed_text = ' '.join(tokens)
-            
-            return processed_text
+            # Return the processed text (less aggressive processing)
+            return text
             
         except Exception as e:
             logging.error(f"Error in text preprocessing: {e}")
@@ -124,7 +107,7 @@ class ArabicTextPreprocessor:
     def _remove_english_and_numbers(self, text):
         """Step 4: Remove English characters and numbers"""
         # Remove English letters and numbers, keep Arabic letters and spaces
-        text = re.sub(r'[a-zA-Z0-9]', '', text)
+        text = re.sub(r'[a-zA-Z0-9]+', ' ', text)
         return text
     
     def _remove_diacritics(self, text):

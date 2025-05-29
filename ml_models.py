@@ -132,37 +132,38 @@ class DepressionDetector:
     
     def _simulate_prediction(self, text, model_name):
         """
-        Simulate model prediction based on keyword analysis
-        In production, this would use the actual trained models
+        Simple depression detection based on keyword analysis
         """
         # Depression-related keywords in Arabic
         depression_keywords = [
-            'اكتئاب', 'حزين', 'يأس', 'قلق', 'وحدة', 'تعب', 'نوم', 'أرق',
-            'مرض', 'ألم', 'صعب', 'مشكلة', 'خوف', 'ضيق', 'زعل', 'انطوائي',
-            'عزلة', 'كآبة', 'ملل', 'فراغ', 'إحباط', 'يائس', 'منزعج'
+            'اكتئاب', 'حزين', 'يأس', 'قلق', 'وحدة', 'تعب', 'أرق',
+            'مرض', 'ألم', 'صعب', 'مشكلة', 'خوف', 'ضيق', 'زعل',
+            'عزلة', 'كآبة', 'ملل', 'فراغ', 'إحباط', 'يائس', 'منزعج',
+            'حزن', 'كره', 'نوم', 'مكتئب', 'تعيس', 'بائس'
         ]
         
         positive_keywords = [
             'سعيد', 'فرح', 'جميل', 'رائع', 'ممتاز', 'حب', 'أمل', 'نجح',
-            'إنجاز', 'فوز', 'نشاط', 'طاقة', 'حماس', 'تفاؤل', 'ابتسام'
+            'إنجاز', 'فوز', 'نشاط', 'طاقة', 'حماس', 'تفاؤل', 'ابتسام',
+            'سرور', 'بهجة', 'راض', 'مبسوط'
         ]
         
-        # Count depression and positive keywords
-        depression_count = sum(1 for keyword in depression_keywords if keyword in text)
-        positive_count = sum(1 for keyword in positive_keywords if keyword in text)
+        # Count keywords in the text
+        depression_count = 0
+        positive_count = 0
         
-        # Different models might have different sensitivity
-        if model_name == 'svm':
-            threshold = 1
-        elif model_name == 'stacking':
-            threshold = 1
-        elif model_name == 'lstm':
-            threshold = 2
-        else:  # arabicbert
-            threshold = 1
+        text_lower = text.lower()
         
-        # Predict based on keyword analysis
-        if depression_count >= threshold and depression_count > positive_count:
+        for keyword in depression_keywords:
+            if keyword in text_lower:
+                depression_count += 1
+        
+        for keyword in positive_keywords:
+            if keyword in text_lower:
+                positive_count += 1
+        
+        # Simple prediction logic
+        if depression_count > 0 and depression_count >= positive_count:
             return 1  # Depression detected
         else:
             return 0  # No depression detected
