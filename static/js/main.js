@@ -109,8 +109,8 @@ class DepressionDetectionApp {
             return;
         }
         
-        // Add user message
-        this.addUserMessage(text);
+        // Clear previous results
+        this.clearResults();
         
         // Clear input
         this.textInput.value = '';
@@ -169,20 +169,10 @@ class DepressionDetectionApp {
         }
     }
     
-    addUserMessage(text) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'user-message mb-3';
-        messageDiv.innerHTML = `
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-primary">النص المدخل (${this.selectedModel.toUpperCase()}):</h6>
-                    <p class="card-text">${this.escapeHtml(text)}</p>
-                </div>
-            </div>
-        `;
-        
-        this.messagesArea.appendChild(messageDiv);
-        this.scrollToBottom();
+    clearResults() {
+        // Remove all result messages, keep only welcome message
+        const results = this.messagesArea.querySelectorAll('.user-message, .bot-message, .loading-message');
+        results.forEach(result => result.remove());
     }
     
     addBotMessage(content, className = '') {
