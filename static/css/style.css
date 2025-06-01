@@ -59,9 +59,9 @@ body {
     margin-left: -50vw;
     margin-right: -50vw;
     width: 100vw;
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+   background: linear-gradient(135deg, #B2DFDB 0%, #009688 100%);;
     color: white;
-    border-bottom: 4px solid #1e8449 !important;
+    /* border-bottom: 4px solid #1e8449 !important; */
     box-shadow: var(--shadow-sm);
     padding-left: 1rem;
     padding-right: 1rem;
